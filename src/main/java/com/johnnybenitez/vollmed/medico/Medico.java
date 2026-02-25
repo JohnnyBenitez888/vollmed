@@ -7,12 +7,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity(name="Medico")
+@Table(name="medicos")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of="id")
-@Entity(name="Medico")
-@Table(name="medicos")
 public class Medico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +24,12 @@ public class Medico {
     private Especialidad especialidad;
     @Embedded
     private Direccion direccion;
+
+    public Medico(DatosRegistroMedico datos) {
+        this.nombre = datos.nombre();
+        this.email = datos.email();
+        this.documento = datos.documento();
+        this.especialidad = datos.especialidad();
+        this.direccion = new Direccion(datos.direccion());
+    }
 }
