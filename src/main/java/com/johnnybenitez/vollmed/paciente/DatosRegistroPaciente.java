@@ -14,5 +14,6 @@ public record DatosRegistroPaciente(
         @NotBlank @Pattern(regexp = "\\d{9,11}") String telefono,
         @NotBlank @Pattern(regexp = "\\d{7,9}") String documento,
         @NotNull @Valid DatosDireccion direccion
-        ) {
+) {
 }
+
