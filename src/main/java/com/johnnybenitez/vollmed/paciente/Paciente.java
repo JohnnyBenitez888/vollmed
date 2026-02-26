@@ -1,4 +1,4 @@
-package com.johnnybenitez.vollmed.medico;
+package com.johnnybenitez.vollmed.paciente;
 
 import com.johnnybenitez.vollmed.direccion.Direccion;
 import jakarta.persistence.*;
@@ -7,13 +7,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "Medico")
-@Table(name = "medicos")
+@Entity(name = "Paciente")
+@Table(name = "pacientes")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Medico {
+public class Paciente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,17 +21,14 @@ public class Medico {
     private String email;
     private String telefono;
     private String documento;
-    @Enumerated(EnumType.STRING)
-    private Especialidad especialidad;
     @Embedded
     private Direccion direccion;
 
-    public Medico(DatosRegistroMedico datos) {
+    public Paciente(DatosRegistroPaciente datos) {
         this.nombre = datos.nombre();
         this.email = datos.email();
         this.telefono = datos.telefono();
         this.documento = datos.documento();
-        this.especialidad = datos.especialidad();
         this.direccion = new Direccion(datos.direccion());
     }
 }
