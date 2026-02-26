@@ -1,9 +1,6 @@
 package com.johnnybenitez.vollmed.controller;
 
-import com.johnnybenitez.vollmed.medico.DatosListaMedico;
-import com.johnnybenitez.vollmed.medico.DatosRegistroMedico;
-import com.johnnybenitez.vollmed.medico.Medico;
-import com.johnnybenitez.vollmed.medico.MedicoRepository;
+import com.johnnybenitez.vollmed.medico.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,11 +26,25 @@ public class MedicoController {
     }
 
     @GetMapping
-    public Page<DatosListaMedico> listar(@PageableDefault(size=10, sort={"nombre"}) Pageable paginacion) {
+    public Page<DatosListaMedico> listar(@PageableDefault(size = 10, sort = {"nombre"}) Pageable paginacion) {
 
-        return medicoRepo.findAll(paginacion).map(DatosListaMedico::new);
+        return medicoRepo.findAllByActivoTrue(paginacion).map(DatosListaMedico::new);
         /*return medicoRepo.findAll().stream()
                 .map(x -> new DatosListaMedico(x.getNombre(), x.getEmail(), x.getDocumento(), x.getEspecialidad()))
                 .toList();*/
+    }
+
+    @Transactional /*Agregar o modificar en la base de datos*/
+    @PutMapping
+    public void actualizar(@RequestBody @Valid DatosActualizacionMedico datos) {
+        var medico = medicoRepo.getReferenceById(datos.id());
+        medico.actualizarInformaciones(datos);
+    }
+
+    @Transactional
+    @DeleteMapping("/{id}")
+    public void eliminar(@PathVariable Long id) {/*Obtenemos el ID de la url*/
+        var medico = medicoRepo.getReferenceById(id);
+        medico.eliminar();
     }
 }
