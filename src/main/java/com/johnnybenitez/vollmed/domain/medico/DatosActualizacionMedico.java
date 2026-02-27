@@ -1,6 +1,6 @@
-package com.johnnybenitez.vollmed.medico;
+package com.johnnybenitez.vollmed.domain.medico;
 
-import com.johnnybenitez.vollmed.direccion.DatosDireccion;
+import com.johnnybenitez.vollmed.domain.direccion.DatosDireccion;
 import jakarta.validation.constraints.NotNull;
 
 public record DatosActualizacionMedico(

@@ -1,4 +1,4 @@
-package com.johnnybenitez.vollmed.paciente;
+package com.johnnybenitez.vollmed.domain.paciente;
 
 public record DatosListaPaciente(
         Long id,

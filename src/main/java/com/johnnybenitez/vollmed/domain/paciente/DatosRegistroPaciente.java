@@ -1,7 +1,7 @@
-package com.johnnybenitez.vollmed.paciente;
+package com.johnnybenitez.vollmed.domain.paciente;
 
 
-import com.johnnybenitez.vollmed.direccion.DatosDireccion;
+import com.johnnybenitez.vollmed.domain.direccion.DatosDireccion;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

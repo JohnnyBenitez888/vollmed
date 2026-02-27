@@ -1,4 +1,4 @@
-package com.johnnybenitez.vollmed.direccion;
+package com.johnnybenitez.vollmed.domain.direccion;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

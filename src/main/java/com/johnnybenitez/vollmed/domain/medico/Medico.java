@@ -1,6 +1,6 @@
-package com.johnnybenitez.vollmed.medico;
+package com.johnnybenitez.vollmed.domain.medico;
 
-import com.johnnybenitez.vollmed.direccion.Direccion;
+import com.johnnybenitez.vollmed.domain.direccion.Direccion;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

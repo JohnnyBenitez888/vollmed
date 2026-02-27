@@ -1,4 +1,4 @@
-package com.johnnybenitez.vollmed.medico;
+package com.johnnybenitez.vollmed.domain.medico;
 
 public enum Especialidad {
 
