@@ -1,14 +1,18 @@
 package com.johnnybenitez.vollmed.controller;
 
 import com.johnnybenitez.vollmed.medico.DatosActualizacionMedico;
+import com.johnnybenitez.vollmed.medico.DatosDetalleMedico;
+import com.johnnybenitez.vollmed.medico.DatosRegistroMedico;
 import com.johnnybenitez.vollmed.paciente.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -21,15 +25,18 @@ public class PacienteController {
 
     @Transactional /*Agregar o modificar en la base de datos*/
     @PostMapping
-    public void registrar(@RequestBody @Valid DatosRegistroPaciente datos) {
-        // Lógica para ingresar un nuevo médico
-        pacienteRepo.save(new Paciente(datos));
+    public ResponseEntity registrar(@RequestBody @Valid DatosRegistroPaciente datos, UriComponentsBuilder uriBuilder) {
+        var paciente = new Paciente(datos);
+        pacienteRepo.save(paciente);
+        var uri = uriBuilder.path("/pacientes/{id}").buildAndExpand(paciente.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DatosDetallePaciente(paciente));
     }
 
     @GetMapping
-    public Page<DatosListaPaciente> listar(@PageableDefault(size = 10, sort = {"nombre"}) Pageable paginacion) {
+    public ResponseEntity<Page<DatosListaPaciente>> listar(@PageableDefault(size = 10, sort = {"nombre"}) Pageable paginacion) {
 
-        return pacienteRepo.findAllByActivoTrue(paginacion).map(DatosListaPaciente::new);
+        var page = pacienteRepo.findAllByActivoTrue(paginacion).map(DatosListaPaciente::new);
+        return ResponseEntity.ok(page);
         /*return medicoRepo.findAll().stream()
                 .map(x -> new DatosListaMedico(x.getNombre(), x.getEmail(), x.getDocumento(), x.getEspecialidad()))
                 .toList();*/
@@ -37,15 +44,26 @@ public class PacienteController {
 
     @Transactional /*Agregar o modificar en la base de datos*/
     @PutMapping
-    public void actualizar(@RequestBody @Valid DatosActualizacionPaciente datos) {
+    public ResponseEntity actualizar(@RequestBody @Valid DatosActualizacionPaciente datos) {
         var paciente = pacienteRepo.getReferenceById(datos.id());
         paciente.actualizarInformaciones(datos);
+
+        return ResponseEntity.ok(new DatosDetallePaciente(paciente));
     }
 
     @Transactional
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {/*Obtenemos el ID de la url*/
+    public ResponseEntity eliminar(@PathVariable Long id) {/*Obtenemos el ID de la url*/
         var paciente = pacienteRepo.getReferenceById(id);
         paciente.eliminar();
+        return ResponseEntity.noContent().build();
+    }
+
+    /*Sin Transactional porque vamos a traer algo*/
+    @GetMapping("/{id}")
+    public ResponseEntity detallar(@PathVariable Long id) {/*Obtenemos el ID de la url*/
+        var paciente = pacienteRepo.getReferenceById(id);
+        return ResponseEntity.ok(new DatosDetallePaciente(paciente));
     }
 }
+
