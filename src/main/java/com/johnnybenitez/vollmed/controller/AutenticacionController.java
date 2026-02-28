@@ -2,6 +2,7 @@ package com.johnnybenitez.vollmed.controller;
 
 import com.johnnybenitez.vollmed.domain.usuario.DatosAutenticacion;
 import com.johnnybenitez.vollmed.domain.usuario.Usuario;
+import com.johnnybenitez.vollmed.infra.security.DatosTokenJWT;
 import com.johnnybenitez.vollmed.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,10 @@ public class AutenticacionController {
 
     @PostMapping
     public ResponseEntity iniciarSesion(@RequestBody @Valid DatosAutenticacion datos) {
-        var token = new UsernamePasswordAuthenticationToken(datos.login(), datos.contrasena());
-        var autenticacion = manager.authenticate(token);
-        return ResponseEntity.ok(tokenService.generarToken((Usuario) autenticacion.getPrincipal()));
+        var authenticationToken = new UsernamePasswordAuthenticationToken(datos.login(), datos.contrasena());/*Para saber los datos del usuario que está intentando loguearse*/
+        var autenticacion = manager.authenticate(authenticationToken);
+        var tokenJWT = tokenService.generarToken((Usuario) autenticacion.getPrincipal());/*Es el que le devolvemos al usuario para uso futuro*/
+        return ResponseEntity.ok(new DatosTokenJWT(tokenJWT));
     }
 
 }
