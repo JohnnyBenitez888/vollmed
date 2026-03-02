@@ -1,11 +1,14 @@
 package com.johnnybenitez.vollmed.domain.consulta;
 
 import com.johnnybenitez.vollmed.domain.ValidacionException;
+import com.johnnybenitez.vollmed.domain.consulta.validaciones.ValidadorDeConsultas;
 import com.johnnybenitez.vollmed.domain.medico.Medico;
 import com.johnnybenitez.vollmed.domain.medico.MedicoRepository;
 import com.johnnybenitez.vollmed.domain.paciente.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ReservaDeConsultas {
@@ -17,6 +20,8 @@ public class ReservaDeConsultas {
     @Autowired
     private ConsultaRepository consultaRepository;
 
+    @Autowired
+    private List<ValidadorDeConsultas> validadores;
 
     public void reservar(DatosReservaConsulta datos) {
         if (!pacienteRepository.existsById(datos.idPaciente())) {
@@ -26,14 +31,16 @@ public class ReservaDeConsultas {
             throw new ValidacionException("El id del medico no existe");
         }
 
-        var medico = elegirMedico(datos);
-        var paciente = pacienteRepository.findById(datos.idPaciente()).get();
+        /*Validaciones*/
+validadores.forEach(v -> v.validar(datos));
 
+        var medico = medicoRepository.findById(datos.idMedico()).get();/*elegirMedico(datos);*/
+        var paciente = pacienteRepository.findById(datos.idPaciente()).get();
         var consulta = new Consulta(null, medico, paciente, datos.fecha(), null);
         consultaRepository.save(consulta);
     }
 
-    private Medico elegirMedico(DatosReservaConsulta datos) {
+   /* private Medico elegirMedico(DatosReservaConsulta datos) {
         if (datos.idMedico() != null) {
             return medicoRepository.getReferenceById(datos.idMedico());
         }
@@ -44,6 +51,7 @@ public class ReservaDeConsultas {
 
         return medicoRepository.elegirMedicoAleatorioDisponibleEnLaFecha(datos.especialidad(), datos.fecha());
     }
+*/
 
     public void cancelar(DatosCancelamientoConsulta datos) {
         if (!consultaRepository.existsById(datos.idConsulta())) {
