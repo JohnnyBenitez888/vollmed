@@ -1,4 +1,4 @@
-package com.johnnybenitez.vollmed.domain.consulta.validaciones;
+package com.johnnybenitez.vollmed.domain.consulta.validaciones.reserva;
 
 import com.johnnybenitez.vollmed.domain.ValidacionException;
 import com.johnnybenitez.vollmed.domain.consulta.ConsultaRepository;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidadorPacienteSinOtraConsultaEnElMismoDia implements ValidadorDeConsultas{
+public class ValidadorPacienteSinOtraConsultaEnElMismoDia implements ValidadorDeConsultas {
 
     @Autowired
     private ConsultaRepository consultaRepository;

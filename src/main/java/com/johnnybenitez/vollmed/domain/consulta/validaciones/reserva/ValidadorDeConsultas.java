@@ -1,4 +1,4 @@
-package com.johnnybenitez.vollmed.domain.consulta.validaciones;
+package com.johnnybenitez.vollmed.domain.consulta.validaciones.reserva;
 
 import com.johnnybenitez.vollmed.domain.consulta.DatosReservaConsulta;
 

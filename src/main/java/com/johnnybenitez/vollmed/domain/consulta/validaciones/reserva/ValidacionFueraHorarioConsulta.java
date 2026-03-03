@@ -1,11 +1,11 @@
-package com.johnnybenitez.vollmed.domain.consulta.validaciones;
+package com.johnnybenitez.vollmed.domain.consulta.validaciones.reserva;
 
 import com.johnnybenitez.vollmed.domain.ValidacionException;
 import com.johnnybenitez.vollmed.domain.consulta.DatosReservaConsulta;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidacionFueraHorarioConsulta implements ValidadorDeConsultas{
+public class ValidacionFueraHorarioConsulta implements ValidadorDeConsultas {
 
     public void validar(DatosReservaConsulta datos){
         var fechaConsulta = datos.fecha();

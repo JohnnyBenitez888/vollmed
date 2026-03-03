@@ -1,5 +1,6 @@
 package com.johnnybenitez.vollmed.infra.exceptions;
 
+import com.johnnybenitez.vollmed.domain.ValidacionException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,23 +14,29 @@ public class GestordeErrores {
 
     /*Devuelve un 404 cuando no encontramos un medico/paciente en particular*/
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity gestionarError404(){
+    public ResponseEntity gestionarError404() {
         return ResponseEntity.notFound().build();
     }
 
     /*Devuelve un 400 cuando algunos de los campos esta equivocado o cual es el problema con ese campo*/
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity gestionarError400(MethodArgumentNotValidException ex){
+    public ResponseEntity gestionarError400(MethodArgumentNotValidException ex) {
         var errores = ex.getFieldErrors();
         return ResponseEntity.badRequest().body(errores.stream().map(DatosErrorValidacion::new).toList());
     }
 
-    public record DatosErrorValidacion(String campo, String mensaje){
-        public DatosErrorValidacion(FieldError error){
+    public record DatosErrorValidacion(String campo, String mensaje) {
+        public DatosErrorValidacion(FieldError error) {
             this(
                     error.getField(),
                     error.getDefaultMessage()
             );
         }
+    }
+
+
+    @ExceptionHandler(ValidacionException.class)
+    public ResponseEntity gestionarErrorDeValidacion(ValidacionException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }
