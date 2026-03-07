@@ -12,4 +12,13 @@ public record DatosDireccion(
         @NotBlank String ciudad,
         @NotBlank String estado
 ) {
+    public DatosDireccion(@NotBlank String calle, String numero, String complemento, String barrio, String codigo_postal, String ciudad, String estado) {
+        this.calle = calle;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.barrio = barrio;
+        this.codigo_postal = codigo_postal;
+        this.ciudad = ciudad;
+        this.estado = estado;
+    }
 }
